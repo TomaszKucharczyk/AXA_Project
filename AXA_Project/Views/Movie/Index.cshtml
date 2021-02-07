@@ -1,0 +1,20 @@
+﻿@model AXA_Project.Models.ViewModels.MovieViewModel
+@{
+}
+
+<h3>List of STAR WARS Films</h3>
+<div>
+	<ul>
+		@foreach (var item in Model.Results)
+		{
+			<li>
+				<div>
+					<span>
+						@Html.ActionLink("Episode " + item.Episode_id + ": " + item.Title, "Details", "Movie", new { id = item.Episode_id }, null) 
+						| Rating: @item.Rating
+					</span>
+				</div>
+			</li>
+		}
+	</ul>
+</div>
