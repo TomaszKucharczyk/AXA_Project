@@ -37,7 +37,14 @@ namespace AXA_Project.Controllers
 
 				foreach (var item in movies.Results)
 				{
-					item.Rating = _context.Ratings.Any(x => x.Episode_Id == item.Episode_id) ? _context.Ratings.First(x => x.Episode_Id == item.Episode_id).Grade.ToString() : "No rating yet!";
+					if (_context.Ratings.Any(x => x.Episode_Id == item.Episode_id))
+					{
+						item.Rating = Math.Round(_context.Ratings.Average(x => x.Grade), 2).ToString();
+					}
+					else
+					{
+						item.Rating = "No rating yet!";
+					}
 				}
 
 				movies.Results = movies.Results.OrderBy(x => x.Episode_id).ToList();
@@ -54,7 +61,7 @@ namespace AXA_Project.Controllers
 		{
 			try
 			{
-				if (id != 3) //when episode 3 is choosen, id changes to 0
+				if (id != 3) //when episode 3 is chosen, id changes to 0
 					id = (id + 3) % 6;
 				else
 					id = 6;
@@ -75,7 +82,12 @@ namespace AXA_Project.Controllers
 						movie.Vehicles = await JSONConversionHelper.ConversionHelperAsync(movie.Vehicles, client);
 					}
 				}
-				movie.Rating = _context.Ratings.Any(x => x.Episode_Id == movie.Episode_Id) ? _context.Ratings.First(x => x.Episode_Id == movie.Episode_Id).Grade : 0;
+				var tmp = _context.Ratings.Where(x => x.Episode_Id == movie.Episode_Id).ToList();
+				movie.Ratings = new List<RatingViewModel>();
+				foreach (var item in tmp)
+				{
+					movie.Ratings.Add(new RatingViewModel() { Grade = item.Grade, UserName = item.UserName });
+				}
 
 				return View(movie);
 			}
@@ -85,18 +97,11 @@ namespace AXA_Project.Controllers
 			}
 		}
 
-		public IActionResult RateMovie(int Episode_Id, int Rating)
+		public IActionResult RateMovie(int Episode_Id, int Rating, string UserName)
 		{
 			try
 			{
-				if (_context.Ratings.Any(x => x.Episode_Id == Episode_Id))
-				{
-					_context.Ratings.First(x => x.Episode_Id == Episode_Id).Grade = Rating;
-				}
-				else
-				{
-					_context.Ratings.Add(new RatingModel() { Episode_Id = Episode_Id, Grade = Rating });
-				}
+				_context.Ratings.Add(new RatingModel() { Episode_Id = Episode_Id, Grade = Rating, UserName = UserName });
 				_context.SaveChanges();
 
 				return RedirectToAction("Details", "Movie", new { id = Episode_Id });

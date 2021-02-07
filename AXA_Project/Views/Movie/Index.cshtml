@@ -11,7 +11,7 @@
 				<div>
 					<span>
 						@Html.ActionLink("Episode " + item.Episode_id + ": " + item.Title, "Details", "Movie", new { id = item.Episode_id }, null) 
-						| Rating: @item.Rating
+						| Average Rating: @item.Rating
 					</span>
 				</div>
 			</li>

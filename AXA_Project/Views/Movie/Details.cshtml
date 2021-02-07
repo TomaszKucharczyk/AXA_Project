@@ -1,57 +1,71 @@
 ﻿@model AXA_Project.Models.MovieModel
 
 <h3>Details</h3>
-<div class="col-4">
+<div class="col-12">
 	<h4>Rate movie</h4>
-	<form method="post" asp-action="RateMovie">
+	<form method="post" asp-action="RateMovie" class="form-group">
 		@Html.DropDownListFor(m => m.Rating, Enumerable.Range(0, 11).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }))
+		@Html.TextBoxFor(m => m.UserName, null, new { @placeholder = "Enter user name"})
 		@Html.HiddenFor(m => m.Episode_Id)
-		<input type="submit" value="Save" />
+		<br />
+		<input type="submit" value="Save rating" class="btn btn-secondary" />
 	</form>
 </div>
-<div class="col-8">
-	<ul>
-		<li><b>Title:</b> @Model.Title</li>
-		<li><b>Episode Number:</b> @Model.Episode_Id</li>
-		<li><b>Director: </b> @Model.Director</li>
-		<li><b>Producer: </b> @Model.Producer</li>		
-		<li><b>Release date:</b> @Model.Release_Date.ToString("yyyy-MM-dd")</li>
-		<li><b>Opening_Crawl: </b> @Model.Opening_Crawl</li>
-		<li><b>List of characters: </b>
+<div class="container">
+	<div class="row">
+		<div class="col-lg">
 			<ul>
-				@foreach (var item in Model.Characters)
+				<li><b>Title:</b> @Model.Title</li>
+				<li><b>Episode Number:</b> @Model.Episode_Id</li>
+				<li><b>Director: </b> @Model.Director</li>
+				<li><b>Producer: </b> @Model.Producer</li>		
+				<li><b>Release date:</b> @Model.Release_Date.ToString("yyyy-MM-dd")</li>
+				<li><b>Opening_Crawl: </b> @Model.Opening_Crawl</li>
+				<li><b>List of characters: </b>
+					<ul>
+						@foreach (var item in Model.Characters)
+						{
+							<li>@item</li>
+						}
+					</ul>
+				</li>
+				<li>
+					<b>List of planets: </b>
+					<ul>
+						@foreach (var item in Model.Planets)
+						{
+							<li>@item</li>
+						}
+					</ul>
+				</li>
+				<li>
+					<b>List of species: </b>
+					<ul>
+						@foreach (var item in Model.Species)
+						{
+							<li>@item</li>
+						}
+					</ul>
+				</li>
+				<li>
+					<b>List of vehicles: </b>
+					<ul>
+						@foreach (var item in Model.Vehicles)
+						{
+							<li>@item</li>
+						}
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div class="col-lg-6">
+			<h3>User ratings</h3>
+			<ul>
+				@foreach (var item in Model.Ratings)
 				{
-					<li>@item</li>
+					<li>@item.UserName: @item.Grade</li>
 				}
 			</ul>
-		</li>
-		<li>
-			<b>List of planets: </b>
-			<ul>
-				@foreach (var item in Model.Planets)
-				{
-					<li>@item</li>
-				}
-			</ul>
-		</li>
-		<li>
-			<b>List of species: </b>
-			<ul>
-				@foreach (var item in Model.Species)
-				{
-					<li>@item</li>
-				}
-			</ul>
-		</li>
-		<li>
-			<b>List of vehicles: </b>
-			<ul>
-				@foreach (var item in Model.Vehicles)
-				{
-					<li>@item</li>
-				}
-			</ul>
-		</li>
-	</ul>
+		</div>
+	</div>
 </div>
-

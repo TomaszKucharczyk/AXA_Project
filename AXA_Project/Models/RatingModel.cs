@@ -12,5 +12,6 @@ namespace AXA_Project.Models
 		public int Id { get; set; }
 		public int Grade { get; set; }
 		public int Episode_Id { get; set; }
+		public string UserName { get; set; }
 	}
 }
